@@ -4,9 +4,11 @@ import { Server } from "socket.io";
 import cors from "cors";
 import dotenv from "dotenv";
 import socketHandler from "./socket.js";
+import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 
 dotenv.config();
+connectDB();
 
 const app = express();
 app.use(express.json());
