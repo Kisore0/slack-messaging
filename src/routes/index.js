@@ -1,1 +1,2 @@
-export { default as channel } from "./channel.js";
+export { default as channelRouter } from "./channel.js";
+export { default as authRouter } from "./auth.js";
