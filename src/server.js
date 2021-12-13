@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import socketHandler from "./socket.js";
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
+import { channel } from "./routes/index.js";
 
 dotenv.config();
 connectDB();
@@ -24,6 +25,7 @@ const io = new Server(httpServer, {
 const PORT = process.env.PORT || 3001;
 socketHandler(io);
 
+app.use("/api/v1/channel", channel);
 app.use(notFound);
 app.use(errorHandler);
 
