@@ -15,4 +15,13 @@ authRouter.post(
   userController.registerUser
 );
 
+authRouter.post(
+  "/login",
+  [
+    body("email").not().isEmpty().withMessage("email field is required"),
+    body("password").not().isEmpty().withMessage("password field is required"),
+  ],
+  userController.loginUser
+);
+
 export default authRouter;
