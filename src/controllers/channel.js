@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { validationResult } from "express-validator";
 import channelFunc from "../models/channel/index.js";
 import { errorFormatter } from "../utils/errorFormatter.js";
@@ -9,7 +10,7 @@ channelController.createChannel = async (req, res, next) => {
     if (!errorResult.isEmpty()) {
       return res.json({ errors: errorResult.array() });
     }
-    const newChannel = await channelFunc.createChannel(req.body);
+    const newChannel = await channelFunc.createChannel({ ...req.body, createdBy: req.user._id });
     res.status(201).json(newChannel);
   } catch (err) {
     next(err);
@@ -18,7 +19,7 @@ channelController.createChannel = async (req, res, next) => {
 
 channelController.getAllChannels = async (req, res, next) => {
   try {
-    const channels = await channelFunc.fetchAll();
+    const channels = await channelFunc.fetchByUserId(mongoose.Types.ObjectId(req.user._id));
     res.status(200).json(channels);
   } catch (err) {
     console.log(err);

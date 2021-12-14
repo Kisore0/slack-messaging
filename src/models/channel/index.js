@@ -7,6 +7,6 @@ channelFunc.createChannel = async (newChannel) => {
   return await channel.save();
 };
 
-channelFunc.fetchAll = () => Channel.find({});
+channelFunc.fetchByUserId = (id) => Channel.find({ createdBy: id });
 
 export default channelFunc;
