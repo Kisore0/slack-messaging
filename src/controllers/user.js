@@ -25,11 +25,40 @@ userController.registerUser = async (req, res, next) => {
         displayName: user.displayName,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: generateToken(user._id),
+        token: "Bearer " + generateToken(user._id),
       });
     } else {
       res.status(400);
       throw new Error("Invalid user data");
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+userController.loginUser = async (req, res, next) => {
+  try {
+    const errorResult = validationResult(req).formatWith(errorFormatter);
+    if (!errorResult.isEmpty()) {
+      return res.json({ error: errorResult.array() });
+    }
+    const user = await userFunc.findByEmail(req.body.email);
+    if (!user) {
+      res.status(401);
+      throw new Error("Invalid email");
+    }
+    if (user && (await user.matchPassword(req.body.password))) {
+      res.json({
+        _id: user._id,
+        fullName: user.fullName,
+        displayName: user.displayName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        token: "Bearer " + generateToken(user._id),
+      });
+    } else {
+      res.status(401);
+      throw new Error("Invalid password");
     }
   } catch (err) {
     next(err);
